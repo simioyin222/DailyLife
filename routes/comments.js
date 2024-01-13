@@ -16,7 +16,7 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
   const comment = new Comment({
     content: req.body.content,
-    author: req.body.author // This should be a user ID in a real-world app
+    author: req.body.author // This should be a user ID
   });
 
   try {
@@ -27,6 +27,14 @@ router.post('/', async (req, res) => {
   }
 });
 
-// Add routes for getting, updating, and deleting specific comments...
+// Route to get all comments for a specific post
+router.get('/post/:postId', async (req, res) => {
+  try {
+    const comments = await Comment.find({ post: req.params.postId });
+    res.json(comments);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 
 module.exports = router;
