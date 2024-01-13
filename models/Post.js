@@ -1,25 +1,17 @@
 const mongoose = require('mongoose');
 
-// Define the schema for a user
-const userSchema = new mongoose.Schema({
-  username: {
-    type: String,
-    required: true,
-    unique: true // Specifies that each username must be unique
+// Define the schema for a post
+const postSchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  content: { type: String, required: true },
+  author: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
   },
-  email: {
-    type: String,
-    required: true,
-    unique: true // Email should also be unique
-  },
-  password: {
-    type: String,
-    required: true
-  }
-  // You can add more fields like dateCreated, profilePicture, etc.
+  // Add other fields as necessary
 });
 
 // Create a model from the schema
-const User = mongoose.model('User', userSchema);
+const Post = mongoose.model('Post', postSchema);
 
-module.exports = User;
+module.exports = Post;
