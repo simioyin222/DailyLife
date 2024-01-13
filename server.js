@@ -1,23 +1,32 @@
 const express = require('express');
-const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+const postRoutes = require('./routes/posts');
+const userRoutes = require('./routes/users');
+const commentRoutes = require('./routes/comments');
+
 const app = express();
 const port = 3001;
 
-mongoose.connect('mongodb+srv://simioyin222:<Godlove6>@blog.zdeh0v9.mongodb.net/?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true });
-
+// Connect to MongoDB
+mongoose.connect('your-mongodb-connection-string', { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function() {
-  // connection
-  console.log("Connected to MongoDB");
-});
+db.on('error', (error) => console.error(error));
+db.once('open', () => console.log('Connected to Database'));
 
-app.use(bodyParser.json());
+// Middleware for parsing JSON bodies
+app.use(express.json());
 
+// Use Routes
+app.use('/posts', postRoutes);
+app.use('/users', userRoutes);
+app.use('/comments', commentRoutes);
+
+// Root Route
 app.get('/', (req, res) => {
-  res.send('Hello World!');
+  res.send('Welcome to the Blog API!');
 });
 
+// Start the Server
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
